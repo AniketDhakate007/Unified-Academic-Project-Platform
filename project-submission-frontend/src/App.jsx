@@ -1,18 +1,15 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard.jsx';
-import CreateProject from './pages/CreateProject';
-
+import Home from './components/index';
+import Login from './components/login'; // Importing the Login component
+import Signup from './components/signup'; // Importing the Signup component
 function App() {
-    const isLoggedIn = !!localStorage.getItem("role");
 
-    return (
+    return (    
         <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/student/login" element={<Login />} />
-            <Route path="/student/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/student/login" />} />
-            <Route path="/student/create" element={isLoggedIn ? <CreateProject /> : <Navigate to="/student/login" />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
     );
 }
