@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ShinyText from './ShinyText';
+import RotatingText from './RotatingText';
+import CurvedLoop from './CurvedLoop';
 import { 
   Users, 
   GitBranch, 
@@ -114,9 +117,23 @@ const UnifiedAcademicPlatform = () => {
               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
                 <Monitor className="w-6 h-6 text-white" />
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Unified Academic Platform
-              </h1>
+                <h1 className="text-3xl font-bold text-slate-100">
+                  <RotatingText
+                    texts={['Unified', 'Academic', 'Platform']}
+                    mainClassName="inline-flex"
+                    splitLevelClassName="overflow-hidden"
+                    staggerFrom="last"
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    exit={{ y: "-100%" }}
+                    staggerDuration={0.03}
+                    transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                    rotationInterval={2000}
+                  />
+                </h1>
+
+
+
             </div>
             <div className="hidden md:flex items-center space-x-4">
               <span className="text-sm text-gray-300">Spring Boot • React • GitHub API</span>
@@ -129,11 +146,22 @@ const UnifiedAcademicPlatform = () => {
       <section className="relative z-10 px-6 py-16">
         <div className="max-w-7xl mx-auto text-center">
           <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <h2 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Unified Academic
+            <h2 className="text-6xl md:text-7xl font-bold mb-6">
+              <ShinyText 
+                text="Unified Academic" 
+                disabled={false} 
+                speed={3} 
+                className="block"
+              />
               <br />
-              Project Platform
+              <ShinyText 
+                text="Project Platform" 
+                disabled={false} 
+                speed={3} 
+                className="block"
+              />
             </h2>
+
             <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
               Revolutionizing college project management with centralized tracking, GitHub integration, 
               and comprehensive faculty oversight for academic excellence.

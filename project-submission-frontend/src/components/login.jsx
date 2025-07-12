@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Lock, Users, ArrowRight, AlertCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -8,7 +9,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [rememberMe, setRememberMe] = useState(false);
-
+  const navigate = useNavigate();
   const validateForm = () => {
     const newErrors = {};
     
@@ -173,10 +174,13 @@ const LoginPage = () => {
                   Signing in...
                 </div>
               ) : (
-                <div className="flex items-center justify-center">
+                <div 
+                  className="flex items-center justify-center cursor-pointer"
+                  onClick={() => navigate('/dashboard')}>
                   <span>Sign In</span>
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </div>
+
               )}
             </button>
           </div>
