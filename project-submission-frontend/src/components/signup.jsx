@@ -453,8 +453,7 @@ export default function GroupSignupPage() {
         <div className="mt-8 text-center">
           <p className="text-base text-slate-600 font-medium">
             Already have a group?{' '}
-            <a 
-              href="/login.jsx" 
+            <a href="/login" 
               className="text-slate-800 hover:text-slate-900 font-bold transition-colors bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text hover:from-slate-900 hover:to-black tracking-wide cursor:pointer"
             >
               Sign in here
