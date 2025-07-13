@@ -18,7 +18,7 @@ const Chatbot = () => {
       {open && (
         <div className="fixed bottom-20 right-6 z-50 w-[350px] h-[500px] bg-white rounded-xl shadow-xl border overflow-hidden">
           <iframe
-            src="https://ai-summarizer-seven-phi.vercel.app"
+            src="https://ai-summarizer-bot.vercel.app/"
             title="AI Chatbot"
             className="w-full h-full border-none"
           />
