@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ShinyText from './ShinyText';
 import RotatingText from './RotatingText';
-import CurvedLoop from './CurvedLoop';
+import ScrollVelocity from './ScrollVelocity';
+
 import { 
   Users, 
   GitBranch, 
@@ -100,6 +101,29 @@ const UnifiedAcademicPlatform = () => {
       icon: <Eye className="w-6 h-6" />
     }
   ];
+
+  const techPairs = [
+  [
+    {
+      icon: <img src="/icons8-react.svg" alt="React" className="w-auto h-auto" />,
+      name: "React",
+    },
+    {
+      icon: <img src="/icons8-spring-boot.svg" alt="Spring Boot" className="w-auto h-auto" />,
+      name: "Spring Boot",
+    },
+  ],
+  [
+    {
+      icon: <img src="/icons8-github.svg" alt="GitHub API" className="w-auto h-auto" />,
+      name: "GitHub API",
+    },
+    {
+      icon: <img src="/icons8-mongodb.svg" alt="NoSQL" className="w-auto h-auto" />,
+      name: "NoSQL",
+    },
+  ],
+];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
@@ -331,20 +355,45 @@ const UnifiedAcademicPlatform = () => {
       </section>
 
       {/* Tech Stack */}
-      <section className="relative z-10 px-6 py-20">
-        <div className="max-w-7xl mx-auto text-center">
-          <h3 className="text-3xl font-bold mb-12 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Built with Modern Technology
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {['Spring Boot', 'React', 'GitHub API', 'MySQL'].map((tech, index) => (
-              <div key={index} className="p-6 bg-slate-800/30 rounded-xl hover:bg-slate-800/50 transition-all duration-300">
-                <div className="text-lg font-semibold text-gray-300">{tech}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+  <div className="w-full mt-10">
+    <div className="max-w-7xl mx-auto text-center">
+      <h3 className="text-5xl font-bold mb-12 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+        Built with Modern Technology
+      </h3>
+    </div>
+  <div className="flex items-center justify-center">
+    <div className="space-y-4">
+  {techPairs.map((pair, idx) => (
+    <ScrollVelocity
+      key={idx}
+      texts={[
+        <div key={idx} className="flex items-center gap-10 text-white font-semibold">
+          {pair.map((tech, i) => (
+            <div key={i} className="flex items-center gap-2">
+              {tech.icon}
+              <ShinyText
+                text={tech.name}
+                disabled={false}
+                speed={3}
+                className="text-white/40"
+              />
+            </div>
+          ))}
+        </div>,
+      ]}
+      velocity={idx % 2 === 0 ? 70 : -70} // alternate direction for visual variety
+      numCopies={10}
+      className="text-white/40"
+      parallaxClassName="py-2"
+      scrollerClassName="text-xl md:text-3xl font-bold tracking-wide flex items-center gap-10"
+    />
+  ))}
+</div>
+
+
+  </div>
+</div>
+
 
       {/* Footer */}
       <footer className="relative z-10 px-6 py-8 border-t border-slate-700">

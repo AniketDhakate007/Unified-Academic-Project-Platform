@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { Users, User, BookOpen, Target, FileText, TrendingUp, Award, Clock, Calendar, MapPin, ChevronRight, MoreVertical } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 const ProjectDashboard = () => {
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState('overview');
-
+  const navigate = useNavigate();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -179,6 +179,12 @@ const ProjectDashboard = () => {
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-medium text-gray-700">Overall Progress</span>
               <span className="text-sm text-gray-500">{groupData.progress}% Complete</span>
+              <button
+                className="px-3 py-1 bg-blue-600 text-white rounded-sm text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer"
+                onClick={() => navigate('/progress')}>
+                View Progress
+              </button>
+
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div 
