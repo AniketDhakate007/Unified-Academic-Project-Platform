@@ -1,6 +1,7 @@
-import React, { useState, useEffect, use } from 'react';
-import { Users, User, BookOpen, Target, FileText, TrendingUp, Award, Clock, Calendar, MapPin, ChevronRight, MoreVertical } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Users, User, BookOpen, Target, FileText, TrendingUp, Award, Clock, Calendar, MapPin, ChevronRight, MoreVertical, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+
 const ProjectDashboard = () => {
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState('overview');
@@ -8,6 +9,12 @@ const ProjectDashboard = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleLogout = () => {
+    // Add your logout logic here
+    console.log('Logout clicked');
+    // Example: navigate('/login') or clear auth tokens
+  };
 
   const groupData = {
     id: 1,
@@ -132,6 +139,17 @@ const ProjectDashboard = () => {
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
       `}</style>
+      
+      {/* Logout Button */}
+      <div className="fixed top-4 right-4 z-50">
+        <button
+          onClick={handleLogout}
+          className="text-gray-600 hover:text-gray-900 transition-colors"
+          title="Logout"
+        >
+          <LogOut className="w-6 h-6" />
+        </button>
+      </div>
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Header */}

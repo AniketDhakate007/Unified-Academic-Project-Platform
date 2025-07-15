@@ -186,7 +186,7 @@ const UnifiedAcademicPlatform = () => {
               />
             </h2>
 
-            <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed font-mono">
               Revolutionizing college project management with centralized tracking, GitHub integration, 
               and comprehensive faculty oversight for academic excellence.
             </p>
@@ -216,7 +216,7 @@ const UnifiedAcademicPlatform = () => {
                             if (role.title === 'Student Portal') {
                             navigate('/login');
                             } else if (role.title === 'Admin Dashboard') {
-                            navigate('/admin-login');
+                            navigate('/admin_login');
                             }
                         }}
                         className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2"
@@ -240,7 +240,7 @@ const UnifiedAcademicPlatform = () => {
             <h3 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               How It Works
             </h3>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-mono">
               Experience seamless project management with our intuitive four-step process designed for academic excellence.
             </p>
           </div>
@@ -367,7 +367,7 @@ const UnifiedAcademicPlatform = () => {
     <ScrollVelocity
       key={idx}
       texts={[
-        <div key={idx} className="flex items-center gap-10 text-white font-semibold">
+        <div key={idx} className="flex items-center gap-10 text-white text-4xl font-mono">
           {pair.map((tech, i) => (
             <div key={i} className="flex items-center gap-2">
               {tech.icon}
@@ -382,7 +382,7 @@ const UnifiedAcademicPlatform = () => {
         </div>,
       ]}
       velocity={idx % 2 === 0 ? 70 : -70} // alternate direction for visual variety
-      numCopies={10}
+      numCopies={20}
       className="text-white/40"
       parallaxClassName="py-2"
       scrollerClassName="text-xl md:text-3xl font-bold tracking-wide flex items-center gap-10"
