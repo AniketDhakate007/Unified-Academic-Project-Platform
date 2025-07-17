@@ -106,7 +106,7 @@ const Chatbot = () => {
                 </div>
               ) : (
                 <iframe
-                  src="https://ai-summarizer-hemant.vercel.app/"
+                  src="https://ai-document-summarizer-kappa.vercel.app/"
                   title="AI Chatbot"
                   className="w-full h-full border-none"
                 />
