@@ -24,7 +24,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/projects")
-@CrossOrigin(origins = "https://unified-academic-project-platform.vercel.app")
+@CrossOrigin(origins = "http://localhost:5173",
+    "http://localhost:3000",
+    "https://unified-academic-project-platform.vercel.app")
 public class ProjectController {
 
     @Autowired
