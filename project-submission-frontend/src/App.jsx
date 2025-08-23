@@ -47,9 +47,18 @@ const App = () => {
             <Route path="/:type/auth" element={<AuthChoice />} />
 
             <Route path="student/project/:id" element={isAuthenticated() && role === "STUDENT"
+            ? <ProjectDetail />
+            : <Navigate to={`/`} state={{ from: location }} replace /> }/>
+
+            <Route path="student/project/:id" element={<ProjectDetail />} />
+            import EditProject from "./pages/EditProject.jsx";
+
+
+            <Route path="student/project/:id" element={isAuthenticated() && role === "STUDENT"
                 ? <ProjectDetail />
                 : <Navigate to={`/`} state={{ from: location }} replace /> }/>
             {/*<Route path="student/project/:id" element={<ProjectDetail />} />*/}
+
 
             <Route
                 path="/student/project/:id/edit"
@@ -59,6 +68,7 @@ const App = () => {
                         : <Navigate to="/" replace />
                 }
             />
+
 
             <Route path="/admin/auth" element={<FacultyLogin />} />
         </Routes>
