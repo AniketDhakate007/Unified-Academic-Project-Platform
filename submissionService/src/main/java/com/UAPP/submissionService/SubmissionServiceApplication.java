@@ -12,7 +12,6 @@ public class SubmissionServiceApplication {
 				.ignoreIfMissing()
 				.load();
 
-
 		dotenv.entries().forEach(entry ->
 				System.setProperty(entry.getKey(), entry.getValue())
 		);
