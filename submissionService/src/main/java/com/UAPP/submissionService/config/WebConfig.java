@@ -20,10 +20,9 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns("http://localhost:5173",
-                                       "http://localhost:3000",
-                                       "https://unified-academic-project-platform.vercel.app")
+                        "http://localhost:3000",
+                        "https://unified-academic-project-platform.vercel.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
                 .allowCredentials(true);
     }
 
