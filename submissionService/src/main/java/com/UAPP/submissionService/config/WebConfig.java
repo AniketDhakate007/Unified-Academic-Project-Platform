@@ -21,7 +21,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOriginPatterns("http://localhost:5173",
                                        "http://localhost:3000",
-                                       "https://unified-academic-project-platform.vercel.app")
+                                       "https://unified-academic-project-platform.vercel.app",
+                                       "https://uapp.cse25.tech")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
