@@ -10,56 +10,65 @@ const ProjectDetail = () => {
     const [pdfFile, setPdfFile] = useState(null);
     const Project_URL = import.meta.env.VITE_PROJECTS;
     const GitView = import.meta.env.VITE_GITVIEW;
+    const role = sessionStorage.getItem('role');
+    const [remarkText, setRemarkText] = useState('');
 
-    // Fetch project details
+    // 🔹 Fetch project details
+    const loadProject = () => {
+        const token = sessionStorage.getItem('token');
+        axios
+            .get(`${Project_URL}/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((res) => setProject(res.data))
+            .catch((err) => console.error('Error loading project', err));
+    };
+
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        axios.get(`${Project_URL}/${id}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(res => setProject(res.data))
-            .catch(err => console.error('Error loading project', err));
+        loadProject();
     }, [id]);
 
-    // Submit project (if needed)
-    const handleSubmit = async () => {
-        const token = localStorage.getItem('token');
-        const formData = new FormData();
-
-        formData.append("project", new Blob([JSON.stringify(project)], { type: "application/json" }));
-        formData.append("file", pdfFile);
+    const handleAddRemark = async () => {
+        if (!remarkText.trim()) return;
 
         try {
-            await axios.post('${Project_URL}', formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+            const token = sessionStorage.getItem("token");
 
-            alert("Project submitted!");
-            navigate('/student/dashboard');
-        } catch (err) {
-            console.error("Error submitting project:", err);
-            alert("Failed to submit project.");
+            await axios.post(
+                `${Project_URL}/${id}/remarks`,
+                { text: remarkText.trim() }, // ✅ matches AddRemarkRequest
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            setRemarkText("");
+
+            // Refresh project after adding remark
+            const res = await axios.get(`${Project_URL}/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setProject(res.data);
+
+        } catch (e) {
+            console.error("Add remark error", e);
+            alert("Failed to add remark");
         }
     };
 
-    // Handle PDF view
+    // 🔹 View PDF
     const handleViewPDF = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
             const response = await axios.get(`${Project_URL}/${id}/pdf`, {
                 headers: { Authorization: `Bearer ${token}` },
-                responseType: 'blob'
+                responseType: 'blob',
             });
 
             const file = new Blob([response.data], { type: 'application/pdf' });
             const fileURL = URL.createObjectURL(file);
             window.open(fileURL, '_blank');
         } catch (err) {
-            console.error("Error fetching PDF", err);
-            alert("Could not load PDF");
+            console.error('Error fetching PDF', err);
+            alert('Could not load PDF');
         }
     };
 
@@ -84,6 +93,7 @@ const ProjectDetail = () => {
 
             <main className="pd-content">
                 <div className="pd-container">
+                    {/* HEADER */}
                     <header className="pd-header">
                         <div className="pd-title-section">
                             <h1 className="pd-title">{project.title}</h1>
@@ -103,22 +113,24 @@ const ProjectDetail = () => {
                                 </div>
                                 <div className="pd-meta-card">
                                     <span className="pd-meta-label">Final Submission</span>
-                                    <span className="pd-meta-value">{project.finalSubmissionDate}</span>
+                                    <span className="pd-meta-value">
+                    {project.finalSubmissionDate}
+                  </span>
                                 </div>
                             </div>
                         </div>
                     </header>
 
+                    {/* DESCRIPTION */}
                     <section className="pd-description-section">
                         <div className="pd-section-header">
                             <h2>Project Overview</h2>
                             <div className="pd-section-line"></div>
                         </div>
-                        <div className="pd-description-content">
-                            {project.description}
-                        </div>
+                        <div className="pd-description-content">{project.description}</div>
                     </section>
 
+                    {/* TEAM + TIMELINE */}
                     <div className="pd-main-grid">
                         <section className="pd-section">
                             <div className="pd-section-header">
@@ -151,6 +163,7 @@ const ProjectDetail = () => {
                         </section>
                     </div>
 
+                    {/* REPO */}
                     <section className="pd-section pd-repo-section">
                         <div className="pd-section-header">
                             <h2>Repository</h2>
@@ -167,6 +180,7 @@ const ProjectDetail = () => {
                         </div>
                     </section>
 
+                    {/* ACTIONS */}
                     <div className="pd-actions">
                         <a
                             href={`${GitView}//?repo=${encodeURIComponent(project.githubRepo)}`}
@@ -178,19 +192,68 @@ const ProjectDetail = () => {
                                 <div className="pd-btn-glow"></div>
                             </button>
                         </a>
+
                         <button className="pd-btn" onClick={handleViewPDF}>
                             <span className="pd-btn-text">View Project Summary PDF</span>
                             <div className="pd-btn-glow"></div>
                         </button>
-                        <button
-                            className="pd-btn"
-                            onClick={() => navigate(`/student/project/${id}/edit`)}
-                        >
-                            <span className="pd-btn-text">Edit Project</span>
-                            <div className="pd-btn-glow"></div>
-                        </button>
 
+                        {/* STUDENT-ONLY: Edit button */}
+                        {role === 'STUDENT' && (
+                            <button
+                                className="pd-btn"
+                                onClick={() => navigate(`/student/project/${id}/edit`)}
+                            >
+                                <span className="pd-btn-text">Edit Project</span>
+                                <div className="pd-btn-glow"></div>
+                            </button>
+                        )}
                     </div>
+
+                    {/* ADMIN-ONLY: Remarks section */}
+                    {/* Remarks Section */}
+                    <section className="pd-section">
+                        <div className="pd-section-header">
+                            <h2>Remarks</h2>
+                            <div className="pd-section-line"></div>
+                        </div>
+
+                        <div className="pd-list-container">
+                            {project.remarks && project.remarks.length > 0 ? (
+                                project.remarks.map((remark, idx) => (
+                                    <div key={idx} className="pd-list-item">
+                                        <div className="pd-list-marker"></div>
+                                        <div>
+                                            <p><strong>{remark.author}:</strong> {remark.text}</p>
+                                            <small className="text-gray-400">
+                                                {new Date(remark.createdAt).toLocaleString()}
+                                            </small>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-gray-400">No remarks yet.</p>
+                            )}
+                        </div>
+
+                        {/* Show remark input only for ADMIN */}
+                        {role === "ADMIN" && (
+                            <div className="mt-4 flex gap-2">
+                                <input
+                                    type="text"
+                                    className="pd-input"
+                                    placeholder="Write a remark..."
+                                    value={remarkText}
+                                    onChange={(e) => setRemarkText(e.target.value)}
+                                />
+                                <button className="pd-btn" onClick={handleAddRemark}>
+                                    <span className="pd-btn-text">Add Remark</span>
+                                    <div className="pd-btn-glow"></div>
+                                </button>
+                            </div>
+                        )}
+                    </section>
+
                 </div>
             </main>
         </div>

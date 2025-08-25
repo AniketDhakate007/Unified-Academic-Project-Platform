@@ -1,7 +1,9 @@
 package com.UAPP.submissionService.controller;
 
+import com.UAPP.submissionService.dto.AddRemarkRequest;
 import com.UAPP.submissionService.dto.ProjectRequest;
 import com.UAPP.submissionService.model.Project;
+import com.UAPP.submissionService.model.Remark;
 import com.UAPP.submissionService.repository.ProjectRepository;
 import com.UAPP.submissionService.service.ProjectService;
 import com.UAPP.submissionService.util.JwtUtil;
@@ -18,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -115,4 +118,37 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.getAllProjects());
     }
 
+<<<<<<< HEAD
 }
+=======
+    @GetMapping("/admin")
+    public ResponseEntity<List<Project>> getAllProjectsForAdmin(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7);
+        if (!jwtUtil.isAdmin(token)) return ResponseEntity.status(403).build();
+        return ResponseEntity.ok(projectService.getAllProjects());
+    }
+
+    @PostMapping("/{id}/remarks")
+    public ResponseEntity<Project> addRemark(
+            @PathVariable String id,
+            @RequestBody AddRemarkRequest req,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        String token = authHeader.substring(7);
+        if (!jwtUtil.isAdmin(token)) return ResponseEntity.status(403).build();
+
+        Project p = projectService.getProjectById(id).orElse(null);
+        if (p == null) return ResponseEntity.notFound().build();
+
+        Remark r = Remark.builder()
+                .text(req.getText())
+                .author("admin")
+                .createdAt(Instant.now())
+                .build();
+
+        p.getRemarks().add(r);
+        return ResponseEntity.ok(projectService.save(p));
+    }
+
+}
+>>>>>>> feature-branch
