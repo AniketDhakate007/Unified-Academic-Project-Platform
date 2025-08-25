@@ -30,8 +30,7 @@ import java.util.UUID;
 @CrossOrigin(origins = {
     "http://localhost:5173",
     "http://localhost:3000",
-    "https://unified-academic-project-platform.vercel.app",
-    "https://uapp.cse25.tech"
+    "https://unified-academic-project-platform.vercel.app"
 })
 public class ProjectController {
 
@@ -118,9 +117,6 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.getAllProjects());
     }
 
-<<<<<<< HEAD
-}
-=======
     @GetMapping("/admin")
     public ResponseEntity<List<Project>> getAllProjectsForAdmin(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.substring(7);
@@ -151,4 +147,3 @@ public class ProjectController {
     }
 
 }
->>>>>>> feature-branch
