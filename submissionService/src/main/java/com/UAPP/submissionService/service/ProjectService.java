@@ -65,4 +65,7 @@ public class ProjectService {
     public Optional<Project> getProjectById(String id) {
         return projectRepository.findById(id); //unused
     }
+    public Project save(Project p) {
+        return projectRepository.save(p);
+    }
 }
