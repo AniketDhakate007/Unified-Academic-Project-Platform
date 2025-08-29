@@ -23,6 +23,8 @@ public class Project {
     private String description;
     private List<String> students;
     private String guideName;
+    private String coGuideName;
+    private String email;
     private LocalDate startDate;
     private LocalDate finalSubmissionDate;
     private String githubRepo;

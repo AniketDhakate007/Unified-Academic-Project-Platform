@@ -105,6 +105,10 @@ const ProjectDetail = () => {
                                 <span className="pd-meta-label">Project Guide</span>
                                 <span className="pd-meta-value">{project.guideName}</span>
                             </div>
+                            <div className="pd-meta-card">
+                                <span className="pd-meta-label">Project Co-Guide</span>
+                                <span className="pd-meta-value">{project.coGuideName}</span>
+                            </div>
 
                             <div className="pd-meta-grid">
                                 <div className="pd-meta-card">
@@ -146,22 +150,15 @@ const ProjectDetail = () => {
                                 ))}
                             </div>
                         </section>
-
                         <section className="pd-section">
                             <div className="pd-section-header">
-                                <h2>Milestone Timeline</h2>
+                                <h2>Team Lead's E-mail</h2>
                                 <div className="pd-section-line"></div>
                             </div>
-                            <div className="pd-list-container">
-                                {project.milestoneDates?.map((milestone, idx) => (
-                                    <div key={idx} className="pd-list-item">
-                                        <div className="pd-list-marker"></div>
-                                        <span>{milestone}</span>
-                                    </div>
-                                ))}
-                            </div>
+                            <div className="pd-description-content">{project.email}</div>
                         </section>
                     </div>
+
 
                     {/* REPO */}
                     <section className="pd-section pd-repo-section">
@@ -241,14 +238,16 @@ const ProjectDetail = () => {
                             <div className="mt-4 flex gap-2">
                                 <input
                                     type="text"
-                                    className="pd-input"
+                                    className="flex-1 rounded-lg bg-gray-800 border border-gray-700 px-4 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                                     placeholder="Write a remark..."
                                     value={remarkText}
                                     onChange={(e) => setRemarkText(e.target.value)}
                                 />
-                                <button className="pd-btn" onClick={handleAddRemark}>
-                                    <span className="pd-btn-text">Add Remark</span>
-                                    <div className="pd-btn-glow"></div>
+                                <button
+                                    onClick={handleAddRemark}
+                                    className="px-5 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:opacity-90 focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 transition"
+                                >
+                                    Add Remark
                                 </button>
                             </div>
                         )}
