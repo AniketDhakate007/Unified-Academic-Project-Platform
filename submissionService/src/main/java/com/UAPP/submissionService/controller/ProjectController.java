@@ -5,6 +5,7 @@ import com.UAPP.submissionService.dto.ProjectRequest;
 import com.UAPP.submissionService.model.Project;
 import com.UAPP.submissionService.model.Remark;
 import com.UAPP.submissionService.repository.ProjectRepository;
+import com.UAPP.submissionService.service.EmailService;
 import com.UAPP.submissionService.service.ProjectService;
 import com.UAPP.submissionService.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,8 @@ public class ProjectController {
     private JwtUtil jwtUtil;
     @Autowired
     private ProjectService projectService;
-
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private ProjectRepository projectRepository;
 
@@ -143,7 +145,13 @@ public class ProjectController {
                 .build();
 
         p.getRemarks().add(r);
-        return ResponseEntity.ok(projectService.save(p));
+        Project saved = projectService.save(p);
+
+        if (p.getEmail() != null && !p.getEmail().isEmpty()) {
+            emailService.sendRemarkNotification(p.getEmail(), p.getTitle(), req.getText());
+        }
+
+        return ResponseEntity.ok(saved);
     }
 
 }

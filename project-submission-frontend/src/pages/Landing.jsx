@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-mo
 import { useEffect, useRef, useState } from 'react';
 import '../App.css';
 
+
 const Landing = () => {
     const navigate = useNavigate();
     const [isLoaded, setIsLoaded] = useState(false);
@@ -267,6 +268,7 @@ const Landing = () => {
         <div className="min-h-screen bg-gray-50 text-gray-900 overflow-x-hidden" style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}>
             {!hasLoaded && <LightLoader />}
             <LightBackground />
+
 
             {/* Enhanced Navigation */}
             <motion.nav
