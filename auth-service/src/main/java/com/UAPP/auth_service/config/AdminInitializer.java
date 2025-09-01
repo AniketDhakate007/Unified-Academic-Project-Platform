@@ -5,6 +5,7 @@ import com.UAPP.auth_service.model.User;
 import com.UAPP.auth_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,9 @@ import java.util.Optional;
 @Slf4j
 public class AdminInitializer {
 
+    @Autowired
     private final UserRepository userRepository;
+    @Autowired
     private final PasswordEncoder passwordEncoder;
 
     // read from application.properties which in turn maps env vars
