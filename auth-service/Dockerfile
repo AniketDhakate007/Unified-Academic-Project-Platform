@@ -1,26 +1,33 @@
-# ----------------
+# =====================
 # Build stage
-# ----------------
+# =====================
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
-COPY . .
+
+# Copy Maven wrapper & pom.xml first (for dependency caching)
+COPY pom.xml mvnw ./
+COPY .mvn .mvn
+RUN ./mvnw dependency:go-offline -B
+
+# Now copy the source code
+COPY src ./src
+
+# Build the Spring Boot JAR (skip tests for faster build)
 RUN ./mvnw clean package -DskipTests
 
-# ----------------
+# =====================
 # Run stage
-# ----------------
-FROM eclipse-temurin:21-jre
+# =====================
+FROM eclipse-temurin:21-jre-alpine
 
-# Create non-root user & group
+# Create a non-root user for security
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-
-# Ensure ownership
 RUN chown appuser:appgroup app.jar
 
-# Switch to non-root user
 USER appuser
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Optimized JVM flags for faster startup on Render free tier
+ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-XX:+UseSerialGC", "-XX:TieredStopAtLevel=1", "-noverify", "-jar", "app.jar"]
