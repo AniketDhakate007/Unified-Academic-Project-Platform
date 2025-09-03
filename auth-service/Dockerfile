@@ -1,23 +1,26 @@
-# Build with Maven and JDK 21
-FROM maven:3.9.6-eclipse-temurin-21 AS build
-
+# ----------------
+# Build stage
+# ----------------
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
-
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
-
-RUN chmod +x mvnw
-RUN ./mvnw dependency:go-offline
-
-COPY src ./src
-
+COPY . .
 RUN ./mvnw clean package -DskipTests
 
+# ----------------
 # Run stage
-FROM eclipse-temurin:21-jdk
+# ----------------
+FROM eclipse-temurin:21-jre
+
+# Create non-root user & group
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
+
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Ensure ownership
+RUN chown appuser:appgroup app.jar
 
+# Switch to non-root user
+USER appuser
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
