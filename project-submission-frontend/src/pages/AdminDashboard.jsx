@@ -1,67 +1,45 @@
 import { useEffect, useState } from 'react';
+import useDarkMode from "../hooks/useDarkMode";
+import { getTheme } from "../utils/themeConfig";
 import { getAllProjectsAdmin } from '../services/ProjectService';
 import { useNavigate } from 'react-router-dom';
-import { Search, Users, Eye, Calendar, ArrowRight, Code, Layers, Clock, GitBranch, UserCheck, Filter } from 'lucide-react';
+import PropTypes from "prop-types";
+import { Search, Users, Eye, ArrowRight, Code, Layers, Clock, GitBranch, UserCheck, Filter } from 'lucide-react';
 
 const AdminDashboard = () => {
-    const [projects, setProjects] = useState([]);
-    const [search, setSearch] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
-    const [mounted, setMounted] = useState(false);
-    const [isDark, setIsDark] = useState(false);
-    const navigate = useNavigate();
+  const [projects, setProjects] = useState([]);
+  const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        // Detect system theme preference
-        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        setIsDark(darkModeMediaQuery.matches);
+  const isDark = useDarkMode();
+  const theme = getTheme(isDark);
 
-        const handleThemeChange = (e) => {
-            setIsDark(e.matches);
-        };
+  useEffect(() => {
+    setMounted(true);
+    fetchProjects();
+  }, []);
 
-        darkModeMediaQuery.addEventListener('change', handleThemeChange);
+  const fetchProjects = async () => {
+    setIsLoading(true);
+    try {
+      const res = await getAllProjectsAdmin();
+      setProjects(res.data);
+    } catch (err) {
+      console.error("Admin load error", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-        setMounted(true);
-        setIsLoading(true);
-        getAllProjectsAdmin()
-            .then(res => {
-                setProjects(res.data);
-                setIsLoading(false);
-            })
-            .catch(err => {
-                console.error('Admin load error', err);
-                setIsLoading(false);
-            });
+  const filteredProjects = projects.filter(
+    (p) =>
+      p.guideName?.toLowerCase().includes(search.toLowerCase()) ||
+      p.title?.toLowerCase().includes(search.toLowerCase())
+  );
 
-        return () => darkModeMediaQuery.removeEventListener('change', handleThemeChange);
-    }, []);
-
-    const theme = {
-        bg: isDark ? 'bg-[#0d1117]' : 'bg-[#ffffff]',
-        cardBg: isDark ? 'bg-[#161b22]' : 'bg-white',
-        border: isDark ? 'border-[#30363d]' : 'border-[#d1d9e0]',
-        text: {
-            primary: isDark ? 'text-[#f0f6fc]' : 'text-[#1f2328]',
-            secondary: isDark ? 'text-[#8d96a0]' : 'text-[#656d76]',
-            muted: isDark ? 'text-[#7d8590]' : 'text-[#848d97]'
-        },
-        accent: isDark ? 'bg-[#1f6feb]' : 'bg-[#0969da]',
-        accentHover: isDark ? 'hover:bg-[#388bfd]' : 'hover:bg-[#0860ca]',
-        button: isDark ? 'bg-[#21262d] hover:bg-[#30363d]' : 'bg-[#f6f8fa] hover:bg-[#f3f4f6]',
-        buttonBorder: isDark ? 'border-[#30363d]' : 'border-[#d1d9e0]',
-        searchBg: isDark ? 'bg-[#0d1117]' : 'bg-white',
-        searchBorder: isDark ? 'border-[#30363d] focus:border-[#388bfd]' : 'border-[#d1d9e0] focus:border-[#0969da]'
-    };
-
-    // Filter projects based on guideName and title
-    const filteredProjects = projects.filter(p =>
-        p.guideName?.toLowerCase().includes(search.toLowerCase()) ||
-        p.title?.toLowerCase().includes(search.toLowerCase())
-    );
-
-    // Get unique guides for stats
-    const uniqueGuides = [...new Set(projects.map(p => p.guideName).filter(Boolean))];
+  const uniqueGuides = [...new Set(projects.map((p) => p.guideName).filter(Boolean))];
 
     return (
         <div className={`min-h-screen transition-colors duration-200 ${theme.bg}`}>
@@ -78,7 +56,7 @@ const AdminDashboard = () => {
                                 Monitor and manage all student projects
                             </p>
                         </div>
-
+                        
                         <div className="flex items-center gap-3">
                             <div className={`hidden sm:flex items-center gap-4 text-xs ${theme.text.secondary}`}>
                                 <div className={`flex items-center gap-2 px-3 py-1.5 ${theme.button} ${theme.buttonBorder} border rounded-md`}>
@@ -140,15 +118,15 @@ const AdminDashboard = () => {
                                     </span>
                                 </div>
                             </div>
-
+                            
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                                 {filteredProjects.map((project, index) => (
-                                    <ProjectCard
-                                        key={project.id}
-                                        project={project}
+                                    <ProjectCard 
+                                        key={project.id} 
+                                        project={project} 
                                         index={index}
                                         theme={theme}
-                                        onClick={() => navigate(`/admin/project/${project.id}`)}
+                                        onClick={() => navigate(`/admin/project/${project.id}`)} 
                                     />
                                 ))}
                             </div>
@@ -171,19 +149,19 @@ const EmptyState = ({ search, theme }) => {
                     <Users className={`w-8 h-8 ${theme.text.muted}`} />
                 )}
             </div>
-
+            
             <div className="text-center space-y-2 max-w-md">
                 <h3 className={`text-lg font-semibold ${theme.text.primary}`}>
                     {search ? 'No projects found' : 'No projects yet'}
                 </h3>
                 <p className={`text-sm ${theme.text.secondary} leading-relaxed`}>
-                    {search
+                    {search 
                         ? `No projects match "${search}". Try adjusting your search terms.`
                         : 'No student projects have been created yet.'
                     }
                 </p>
             </div>
-
+            
             {search && (
                 <button
                     className={`mt-6 ${theme.button} ${theme.buttonBorder} border ${theme.text.secondary} px-4 py-2 rounded-md font-medium text-sm transition-colors duration-200 flex items-center gap-2`}
@@ -199,18 +177,18 @@ const EmptyState = ({ search, theme }) => {
 // Loading Skeleton Component
 const LoadingSkeleton = ({ theme }) => {
     const skeletonBg = theme.cardBg.replace('bg-', 'bg-opacity-50 bg-');
-
+    
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between mb-6">
                 <div className={`h-6 ${skeletonBg} rounded-md w-32 animate-pulse`}></div>
                 <div className={`h-4 ${skeletonBg} rounded-md w-20 animate-pulse`}></div>
             </div>
-
+            
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {[...Array(6)].map((_, index) => (
-                    <div
-                        key={index}
+                    <div 
+                        key={index} 
                         className={`${theme.cardBg} ${theme.border} border rounded-lg p-6 animate-pulse`}
                         style={{ animationDelay: `${index * 100}ms` }}
                     >
@@ -218,13 +196,13 @@ const LoadingSkeleton = ({ theme }) => {
                             <div className={`w-10 h-10 ${skeletonBg} rounded-md`}></div>
                             <div className={`w-4 h-4 ${skeletonBg} rounded`}></div>
                         </div>
-
+                        
                         <div className="space-y-3">
                             <div className={`h-5 ${skeletonBg} rounded w-3/4`}></div>
                             <div className={`h-4 ${skeletonBg} rounded w-full`}></div>
                             <div className={`h-4 ${skeletonBg} rounded w-5/6`}></div>
                         </div>
-
+                        
                         <div className={`mt-6 pt-4 border-t ${theme.border} flex items-center justify-between`}>
                             <div className={`h-4 ${skeletonBg} rounded w-24`}></div>
                             <div className={`w-2 h-2 ${skeletonBg} rounded-full`}></div>
@@ -252,10 +230,11 @@ const ProjectCard = ({ project, index, theme, onClick }) => {
     };
 
     return (
-        <article
-            className={`group ${theme.cardBg} ${theme.border} border rounded-lg p-6 cursor-pointer hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}
-            onClick={onClick}
-            style={{ transitionDelay: `${index * 25}ms` }}
+        <button
+        type="button"
+        onClick={onClick}
+        style={{ transitionDelay: `${index * 25}ms` }}
+        className={`group w-full text-left ${theme.cardBg} ${theme.border} border rounded-lg p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}
         >
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
@@ -273,7 +252,7 @@ const ProjectCard = ({ project, index, theme, onClick }) => {
                 <h3 className={`text-base font-medium ${theme.text.primary} group-hover:text-blue-600 transition-colors duration-200 line-clamp-1`}>
                     {project.title}
                 </h3>
-
+                
                 {project.description && (
                     <p className={`${theme.text.secondary} line-clamp-2 text-sm leading-relaxed`}>
                         {project.description}
@@ -296,12 +275,32 @@ const ProjectCard = ({ project, index, theme, onClick }) => {
                         <Clock className="w-3 h-3" />
                         <span>{project.startDate}</span>
                     </div>
-
+                    
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                 </div>
             </div>
-        </article>
+        </button>
     );
+};
+
+EmptyState.propTypes = {
+  search: PropTypes.string.isRequired, // search term entered by user
+  theme: PropTypes.oneOf(["light", "dark"]).isRequired, // enforce specific theme values
+};
+LoadingSkeleton.propTypes = {
+  theme: PropTypes.oneOf(["light", "dark"]).isRequired, // skeleton theme
+};
+ProjectCard.propTypes = {
+  project: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    link: PropTypes.string,
+    guideName: PropTypes.string,      // 👈 add this
+    startDate: PropTypes.string,
+  }).isRequired,
+  index: PropTypes.number.isRequired,
+  theme: PropTypes.oneOf(["light", "dark"]).isRequired,
+  onClick: PropTypes.func,
 };
 
 export default AdminDashboard;

@@ -355,73 +355,73 @@
     .pd-container {
         padding: 20px;
     }
-
+    
     .pd-title {
         font-size: 28px;
     }
-
+    
     .pd-meta-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 16px;
     }
-
+    
     .pd-meta-card {
         padding: 16px;
     }
-
+    
     .pd-meta-label {
         font-size: 12px;
     }
-
+    
     .pd-meta-value {
         font-size: 14px;
     }
-
+    
     .pd-section-header h2 {
         font-size: 20px;
     }
-
+    
     .pd-description-content {
         font-size: 15px;
         padding: 18px;
     }
-
+    
     .pd-list-container {
         padding: 18px;
     }
-
+    
     .pd-list-item {
         gap: 12px;
         padding: 8px 0;
     }
-
+    
     .pd-list-item span {
         font-size: 14px;
     }
-
+    
     .pd-repo-content {
         flex-direction: row;
         align-items: center;
         gap: 16px;
         padding: 18px;
     }
-
+    
     .pd-repo-link {
         font-size: 14px;
     }
-
+    
     .pd-actions {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
         gap: 12px;
     }
-
+    
     /* Show full text on larger screens */
     .pd-btn .pd-btn-text-full {
         display: inline;
     }
-
+    
     .pd-btn .pd-btn-text-short {
         display: none;
     }
@@ -433,60 +433,60 @@
         padding: 32px 24px;
         gap: 32px;
     }
-
+    
     .pd-header {
         gap: 24px;
         padding-bottom: 24px;
     }
-
+    
     .pd-title {
         font-size: 32px;
     }
-
+    
     .pd-section {
         gap: 16px;
     }
-
+    
     .pd-description-content {
         font-size: 16px;
         padding: 24px;
     }
-
+    
     .pd-main-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
         gap: 24px;
     }
-
+    
     .pd-list-container {
         padding: 20px;
         gap: 16px;
     }
-
+    
     .pd-repo-content {
         padding: 20px;
     }
-
+    
     .pd-actions {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 16px;
     }
-
+    
     /* Hover effects for desktop */
     .pd-btn:hover {
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
-
+    
     .pd-btn:first-child:hover {
         background-color: #2ea043;
     }
-
+    
     .pd-actions .pd-btn:nth-child(2):hover {
         background-color: #30363d;
         border-color: #8b949e;
     }
-
+    
     .pd-actions .pd-btn:last-child:hover {
         background-color: #30363d;
     }

@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { login } from '../services/authService';
+import { login } from '../services/AuthService';
 import '../styles/Login.css'
 import api from "../services/axiosInstance.js";
 
@@ -19,12 +19,12 @@ const Login = () => {
     }, []);
 
     const handleLogin = async () => {
-        if (loading) return;
-        
-        if (!data.username.trim() || !data.password.trim()) {
-            alert("Username and password cannot be empty");
-            return;
-        }
+if (loading) return;
+
+    if (!data.username.trim() || !data.password.trim()) {
+        alert("Username and password cannot be empty");
+        return;
+    }
         setLoading(true);
 
         try {

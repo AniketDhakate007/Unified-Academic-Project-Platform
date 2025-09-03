@@ -1,55 +1,28 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import useDarkMode from "../hooks/useDarkMode";
+import { getTheme } from "../utils/themeConfig";
 import { getMyProjects } from '../services/ProjectService';
-import { Plus, Folder, Calendar, ArrowRight, Code, Layers, Clock, GitBranch } from 'lucide-react';
+import { Plus, Folder, ArrowRight, Code, Layers, Clock, GitBranch } from 'lucide-react';
 
 const StudentDashboard = () => {
-    const [projects, setProjects] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [mounted, setMounted] = useState(false);
-    const [isDark, setIsDark] = useState(false);
-    const navigate = useNavigate();
+  const [projects, setProjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
-    useEffect(() => {
-        // Detect system theme preference
-        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        setIsDark(darkModeMediaQuery.matches);
+  const isDark = useDarkMode();
+  const theme = getTheme(isDark);
+  const navigate = useNavigate();
 
-        const handleThemeChange = (e) => {
-            setIsDark(e.matches);
-        };
+  useEffect(() => {
+    setMounted(true);
 
-        darkModeMediaQuery.addEventListener('change', handleThemeChange);
-
-        setMounted(true);
-        setIsLoading(true);
-        getMyProjects()
-            .then(res => {
-                setProjects(res.data);
-                setIsLoading(false);
-            })
-            .catch(err => {
-                console.error('Error fetching projects', err);
-                setIsLoading(false);
-            });
-
-        return () => darkModeMediaQuery.removeEventListener('change', handleThemeChange);
-    }, []);
-
-    const theme = {
-        bg: isDark ? 'bg-[#0d1117]' : 'bg-[#ffffff]',
-        cardBg: isDark ? 'bg-[#161b22]' : 'bg-white',
-        border: isDark ? 'border-[#30363d]' : 'border-[#d1d9e0]',
-        text: {
-            primary: isDark ? 'text-[#f0f6fc]' : 'text-[#1f2328]',
-            secondary: isDark ? 'text-[#8d96a0]' : 'text-[#656d76]',
-            muted: isDark ? 'text-[#7d8590]' : 'text-[#848d97]'
-        },
-        accent: isDark ? 'bg-[#238636]' : 'bg-[#1f883d]',
-        accentHover: isDark ? 'hover:bg-[#2ea043]' : 'hover:bg-[#1a7f37]',
-        button: isDark ? 'bg-[#21262d] hover:bg-[#30363d]' : 'bg-[#f6f8fa] hover:bg-[#f3f4f6]',
-        buttonBorder: isDark ? 'border-[#30363d]' : 'border-[#d1d9e0]'
-    };
+    getMyProjects()
+      .then(res => setProjects(res.data))
+      .catch(err => console.error(err))
+      .finally(() => setIsLoading(false));
+  }, []);
 
     return (
         <div className={`min-h-screen transition-colors duration-200 ${theme.bg}`}>
@@ -65,13 +38,13 @@ const StudentDashboard = () => {
                                 Manage and track your development projects
                             </p>
                         </div>
-
+                        
                         <div className="flex items-center gap-3">
                             <div className={`hidden sm:flex items-center gap-2 px-3 py-1.5 ${theme.button} ${theme.buttonBorder} border rounded-md text-xs ${theme.text.secondary}`}>
                                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                                 <span>{projects.length} projects</span>
                             </div>
-
+                            
                             <button
                                 className={`${theme.accent} ${theme.accentHover} text-white px-4 py-2 rounded-md font-medium text-sm transition-colors duration-200 flex items-center gap-2 shadow-sm`}
                                 onClick={() => navigate('/student/create')}
@@ -99,15 +72,15 @@ const StudentDashboard = () => {
                                     {projects.length} {projects.length === 1 ? 'project' : 'projects'}
                                 </span>
                             </div>
-
+                            
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                                 {projects.map((project, index) => (
-                                    <ProjectCard
-                                        key={project.id}
-                                        project={project}
+                                    <ProjectCard 
+                                        key={project.id} 
+                                        project={project} 
                                         index={index}
                                         theme={theme}
-                                        onClick={() => navigate(`/student/project/${project.id}`)}
+                                        onClick={() => navigate(`/student/project/${project.id}`)} 
                                     />
                                 ))}
                             </div>
@@ -126,7 +99,7 @@ const EmptyState = ({ navigate, theme }) => {
             <div className={`w-16 h-16 ${theme.cardBg} ${theme.border} border rounded-lg flex items-center justify-center mb-4`}>
                 <Folder className={`w-8 h-8 ${theme.text.muted}`} />
             </div>
-
+            
             <div className="text-center space-y-2 max-w-md">
                 <h3 className={`text-lg font-semibold ${theme.text.primary}`}>
                     No projects yet
@@ -135,7 +108,7 @@ const EmptyState = ({ navigate, theme }) => {
                     Create your first project to get started with tracking your work.
                 </p>
             </div>
-
+            
             <button
                 className={`mt-6 ${theme.accent} ${theme.accentHover} text-white px-4 py-2 rounded-md font-medium text-sm transition-colors duration-200 flex items-center gap-2`}
                 onClick={() => navigate('/student/create')}
@@ -150,18 +123,18 @@ const EmptyState = ({ navigate, theme }) => {
 // Clean Loading Skeleton
 const LoadingSkeleton = ({ theme }) => {
     const skeletonBg = theme.cardBg.replace('bg-', 'bg-opacity-50 bg-');
-
+    
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between mb-6">
                 <div className={`h-6 ${skeletonBg} rounded-md w-32 animate-pulse`}></div>
                 <div className={`h-4 ${skeletonBg} rounded-md w-16 animate-pulse`}></div>
             </div>
-
+            
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {[...Array(6)].map((_, index) => (
-                    <div
-                        key={index}
+                    <div 
+                        key={index} 
                         className={`${theme.cardBg} ${theme.border} border rounded-lg p-6 animate-pulse`}
                         style={{ animationDelay: `${index * 100}ms` }}
                     >
@@ -169,13 +142,13 @@ const LoadingSkeleton = ({ theme }) => {
                             <div className={`w-10 h-10 ${skeletonBg} rounded-md`}></div>
                             <div className={`w-4 h-4 ${skeletonBg} rounded`}></div>
                         </div>
-
+                        
                         <div className="space-y-3">
                             <div className={`h-5 ${skeletonBg} rounded w-3/4`}></div>
                             <div className={`h-4 ${skeletonBg} rounded w-full`}></div>
                             <div className={`h-4 ${skeletonBg} rounded w-5/6`}></div>
                         </div>
-
+                        
                         <div className={`mt-6 pt-4 border-t ${theme.border} flex items-center justify-between`}>
                             <div className={`h-4 ${skeletonBg} rounded w-20`}></div>
                             <div className={`w-2 h-2 ${skeletonBg} rounded-full`}></div>
@@ -203,10 +176,11 @@ const ProjectCard = ({ project, index, theme, onClick }) => {
     };
 
     return (
-        <article
-            className={`group ${theme.cardBg} ${theme.border} border rounded-lg p-6 cursor-pointer hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}
-            onClick={onClick}
-            style={{ transitionDelay: `${index * 25}ms` }}
+        <button
+        type="button"
+        onClick={onClick}
+        style={{ transitionDelay: `${index * 25}ms` }}
+        className={`group w-full text-left ${theme.cardBg} ${theme.border} border rounded-lg p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}
         >
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
@@ -221,7 +195,7 @@ const ProjectCard = ({ project, index, theme, onClick }) => {
                 <h3 className={`text-base font-medium ${theme.text.primary} group-hover:text-blue-600 transition-colors duration-200 line-clamp-1`}>
                     {project.title}
                 </h3>
-
+                
                 <p className={`${theme.text.secondary} line-clamp-2 text-sm leading-relaxed`}>
                     {project.description}
                 </p>
@@ -240,12 +214,71 @@ const ProjectCard = ({ project, index, theme, onClick }) => {
                             </>
                         )}
                     </div>
-
+                    
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 </div>
             </div>
-        </article>
+        </button>
     );
 };
+// EmptyState
+EmptyState.propTypes = {
+    navigate: PropTypes.func.isRequired,
+    theme: PropTypes.shape({
+        cardBg: PropTypes.string.isRequired,
+        border: PropTypes.string.isRequired,
+        text: PropTypes.shape({
+            primary: PropTypes.string.isRequired,
+            secondary: PropTypes.string.isRequired,
+            muted: PropTypes.string.isRequired,
+        }).isRequired,
+        accent: PropTypes.string,
+        accentHover: PropTypes.string.isRequired,
+        button: PropTypes.string.isRequired,
+        buttonBorder: PropTypes.string.isRequired,
+    }).isRequired
+};
 
+// LoadingSkeleton
+LoadingSkeleton.propTypes = {
+    theme: PropTypes.shape({
+        cardBg: PropTypes.string.isRequired,
+        border: PropTypes.string.isRequired,
+        text: PropTypes.shape({
+            primary: PropTypes.string,
+            secondary: PropTypes.string,
+            muted: PropTypes.string,
+        }),
+        accent: PropTypes.string,
+        accentHover: PropTypes.string,
+        button: PropTypes.string,
+        buttonBorder: PropTypes.string,
+    }).isRequired
+};
+
+// ProjectCard
+ProjectCard.propTypes = {
+    project: PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        startDate: PropTypes.string.isRequired,
+        guideName: PropTypes.string
+    }).isRequired,
+    index: PropTypes.number.isRequired,
+    theme: PropTypes.shape({
+        cardBg: PropTypes.string.isRequired,
+        border: PropTypes.string.isRequired,
+        text: PropTypes.shape({
+            primary: PropTypes.string.isRequired,
+            secondary: PropTypes.string.isRequired,
+            muted: PropTypes.string.isRequired,
+        }).isRequired,
+        accent: PropTypes.string,
+        accentHover: PropTypes.string.isRequired,
+        button: PropTypes.string.isRequired,
+        buttonBorder: PropTypes.string.isRequired,
+    }).isRequired,
+    onClick: PropTypes.func.isRequired
+};
 export default StudentDashboard;
