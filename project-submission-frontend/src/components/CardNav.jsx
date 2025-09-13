@@ -12,8 +12,10 @@ const CardNav = ({
   ease = "power3.out",
   baseColor = "#fff",
   menuColor,
+
   buttonBgColor,
   buttonTextColor,
+
 }) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -169,6 +171,7 @@ const CardNav = ({
             <img src={logo} alt={logoAlt} className="logo h-[28px]" />
           </div>
 
+
           <button
             type="button"
             className="card-nav-cta-button hidden md:inline-flex border-0 rounded-[calc(0.75rem-0.2rem)] px-4 h-full font-medium cursor-pointer transition-colors duration-300"
@@ -176,6 +179,7 @@ const CardNav = ({
           >
             Get Started
           </button>
+
         </div>
 
         <div

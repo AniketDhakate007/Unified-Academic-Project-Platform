@@ -1,8 +1,14 @@
 import {useNavigate} from "react-router-dom";
+import { useEffect } from "react";
 import axios from "axios";
 
 const FacultyLogin = () => {
     const navigate = useNavigate();
+
+     // Set document title on mount
+    useEffect(() => {
+    document.title = "UAPP | Faculty Login";
+  }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();

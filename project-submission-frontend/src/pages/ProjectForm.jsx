@@ -1,11 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/ProjectForm.css';
+import { event } from "../utils/analytics";
 import {createProject} from "../services/ProjectService.jsx";
 
 const ProjectForm = () => {
     const navigate = useNavigate();
+    
+     // Set document title on mount
+    useEffect(() => {
+    document.title = "UAPP | Submit Project";
+  }, []);
 
     const [project, setProject] = useState({
         title: '',
@@ -68,6 +74,15 @@ const ProjectForm = () => {
 
         try {
             await createProject(formData);
+
+            // 🔹 Track successful project creation
+            event({
+            action: "create_project",
+            category: "project",
+            label: "Student Project Form",
+            value: 1,
+            });
+
             alert('Project submitted successfully!');
             navigate('/student/dashboard');
         } catch (error) {
