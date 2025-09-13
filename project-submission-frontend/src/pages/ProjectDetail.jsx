@@ -33,6 +33,7 @@ const ProjectDetail = () => {
     document.title = "UAPP | Project Detail";
   }, []);
 
+
     const handleAddRemark = async () => {
         if (!remarkText.trim()) return;
 

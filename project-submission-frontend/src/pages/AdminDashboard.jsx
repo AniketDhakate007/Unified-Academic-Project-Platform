@@ -21,10 +21,12 @@ const AdminDashboard = () => {
     fetchProjects();
   }, []);
 
+
    // Set document title on mount
     useEffect(() => {
     document.title = "UAPP | Admin Dashboard";
   }, []);
+
 
   const fetchProjects = async () => {
     setIsLoading(true);
@@ -43,6 +45,10 @@ const AdminDashboard = () => {
       p.guideName?.toLowerCase().includes(search.toLowerCase()) ||
       p.title?.toLowerCase().includes(search.toLowerCase())
   );
+
+
+  const uniqueGuides = [...new Set(projects.map((p) => p.guideName).filter(Boolean))];
+
     return (
         <div className={`min-h-screen transition-colors duration-200 ${theme.bg}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -52,7 +58,11 @@ const AdminDashboard = () => {
                         <div className="space-y-1">
                             <h1 className={`text-2xl font-semibold ${theme.text.primary} flex items-center gap-2`}>
                                 <Users className="w-6 h-6" />
+
                                 Faculty Dashboard
+
+                                Admin Dashboard
+
                             </h1>
                             <p className={`text-sm ${theme.text.secondary}`}>
                                 Monitor and manage all student projects
@@ -65,6 +75,13 @@ const AdminDashboard = () => {
                                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                                     <span>{projects.length} projects</span>
                                 </div>
+
+
+                                <div className={`flex items-center gap-2 px-3 py-1.5 ${theme.button} ${theme.buttonBorder} border rounded-md`}>
+                                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <span>{uniqueGuides.length} guides</span>
+                                </div>
+
                             </div>
                         </div>
                     </div>
