@@ -66,17 +66,10 @@ const Login = () => {
 
                     {/* Welcome Text */}
                     <div className="mb-8">
-
-                    <h2 className="text-3xl font-bold text-gray-900 leading-tight">
-                        Welcome to<br />
-                        {type === 'admin' ? 'Faculty Portal - UAPP' : 'Student Portal - UAPP'}
-                    </h2>
-
                         <h2 className="text-3xl font-bold text-gray-900 leading-tight">
-                            Welcome  to<br />
-                            Student Portal - UAPP
+                            Welcome to<br />
+                            {type === 'admin' ? 'Faculty Portal - UAPP' : 'Student Portal - UAPP'}
                         </h2>
-
                     </div>
 
                     {/* Login Form */}
@@ -85,19 +78,11 @@ const Login = () => {
                             <div className="relative">
                                 <input
                                     type="text"
-
                                     placeholder={type === "admin" ? "Username" : "GroupId"}
                                     value={data.username}
                                     onChange={(e) => setData({ ...data, username: e.target.value })}
                                     onKeyPress={handleKeyPress}
                                     className="block w-full pl-10 pr-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none transition-all"
-
-                                    placeholder="GroupId"
-                                    value={data.username}
-                                    onChange={(e) => setData({ ...data, username: e.target.value })}
-                                    onKeyPress={handleKeyPress}
-                                    className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none transition-all"
-
                                     autoComplete="username"
                                 />
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -112,19 +97,11 @@ const Login = () => {
                             <div className="relative">
                                 <input
                                     type="password"
-
                                     placeholder={type === "admin" ? "Password" : "Password (min. 8 characters)"}
                                     value={data.password}
                                     onChange={(e) => setData({ ...data, password: e.target.value })}
                                     onKeyPress={handleKeyPress}
                                     className="block w-full pl-10 pr-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none transition-all"
-
-                                    placeholder="Password (min. 8 characters)"
-                                    value={data.password}
-                                    onChange={(e) => setData({ ...data, password: e.target.value })}
-                                    onKeyPress={handleKeyPress}
-                                    className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none transition-all"
-
                                     autoComplete="current-password"
                                 />
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -146,13 +123,18 @@ const Login = () => {
                             {loading ? 'Signing in...' : 'Sign in'}
                         </button>
 
-                        {/* Sign up link */}
-                        <p className="text-center text-sm text-gray-600">
-                            Don't have an account?{' '}
-                            <a href="/student/register" className="text-gray-900 hover:text-gray-700 font-medium transition-colors">
-                                Sign up now
-                            </a>
-                        </p>
+                        {/* Sign up link - only show for students */}
+                        {type !== "admin" && (
+                            <p className="text-center text-sm text-gray-600">
+                                Don't have an account?{' '}
+                                <a
+                                    href="/student/register"
+                                    className="text-gray-900 hover:text-gray-700 font-medium transition-colors"
+                                >
+                                    Sign up
+                                </a>
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>

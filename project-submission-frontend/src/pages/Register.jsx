@@ -94,11 +94,7 @@ const Register = () => {
                                     value={data.username}
                                     onChange={(e) => setData({ ...data, username: e.target.value })}
                                     onKeyPress={handleKeyPress}
-
                                     className={`block w-full pl-10 pr-4 py-3 text-gray-900 placeholder-gray-500 border ${
-
-                                    className={`block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border ${
-
                                         errors.username ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-gray-900'
                                     } rounded-lg focus:ring-2 focus:border-transparent outline-none transition-all`}
                                     autoComplete="username"
@@ -121,11 +117,7 @@ const Register = () => {
                                     value={data.password}
                                     onChange={(e) => setData({ ...data, password: e.target.value })}
                                     onKeyPress={handleKeyPress}
-
                                     className={`block w-full pl-10 pr-4 py-3 text-gray-900 placeholder-gray-500 border ${
-
-                                    className={`block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border ${
-
                                         errors.password ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-gray-900'
                                     } rounded-lg focus:ring-2 focus:border-transparent outline-none transition-all`}
                                     autoComplete="new-password"
@@ -147,10 +139,7 @@ const Register = () => {
                                     value={data.confirmPassword}
                                     onChange={(e) => setData({ ...data, confirmPassword: e.target.value })}
                                     onKeyPress={handleKeyPress}
-
                                     className={`block w-full pl-10 pr-4 py-3 text-gray-900 placeholder-gray-500 border ${
-
-                                    className={`block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border ${
                                         errors.confirmPassword ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-gray-900'
                                     } rounded-lg focus:ring-2 focus:border-transparent outline-none transition-all`}
                                     autoComplete="new-password"
