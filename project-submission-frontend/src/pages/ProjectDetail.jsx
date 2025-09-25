@@ -165,7 +165,6 @@ const ProjectDetail = () => {
                         </section>
                     </div>
 
-
                     {/* REPO */}
                     <section className="pd-section pd-repo-section">
                         <div className="pd-section-header">
@@ -182,6 +181,22 @@ const ProjectDetail = () => {
                             </a>
                         </div>
                     </section>
+                    <section className="pd-section pd-repo-section">
+                        <div className="pd-section-header">
+                            <h2>Demo Url</h2>
+                            <div className="pd-section-line"></div>
+                        </div>
+                        <div className="pd-repo-content">
+                            <a
+                                className="pd-repo-link"
+                                href={project.url}
+                                rel="noopener noreferrer"
+                                target={'_blank'}
+                            >
+                                {project.url}
+                            </a>
+                        </div>
+                    </section>
 
                     {/* ACTIONS */}
                     <div className="pd-actions">
@@ -195,6 +210,7 @@ const ProjectDetail = () => {
                                 <div className="pd-btn-glow"></div>
                             </button>
                         </a>
+
 
                         <button className="pd-btn" onClick={handleViewPDF}>
                             <span className="pd-btn-text">View Project Summary PDF</span>

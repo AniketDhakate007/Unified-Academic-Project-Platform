@@ -9,6 +9,7 @@ const CreateProject = () => {
         description: '',
         studentEmails: [''],
         guideName: '',
+        url: '',
         startDate: '',
         finalSubmissionDate: '',
         milestoneDates: [''],
@@ -88,6 +89,7 @@ const CreateProject = () => {
                 </div>
 
                 <input name="githubRepo" placeholder="GitHub Repo URL" onChange={handleChange} required />
+
 
                 <label>
                     Upload Project PDF (optional):
