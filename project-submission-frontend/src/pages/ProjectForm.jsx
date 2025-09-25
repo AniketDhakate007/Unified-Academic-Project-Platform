@@ -58,9 +58,13 @@ const ProjectForm = () => {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (loading) return; // ✅ blocks multiple clicks
+        setLoading(true);
 
         if (!validateForm()) {
             return;
@@ -346,11 +350,13 @@ const ProjectForm = () => {
                             <button
                                 type="submit"
                                 className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transform hover:scale-105 transition-all duration-200 flex items-center"
+                                disabled={loading}
                             >
+
                                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                                 </svg>
-                                Submit Project
+                                {loading ? "Submitting..." : "Submit Project"}
                             </button>
                         </div>
                     </form>

@@ -67,6 +67,9 @@ public class ProjectService {
     public List<Project> getProjectsByStudent(String username) {
         return projectRepository.findByCreatedBy(username); // preferred
     }
+    public void deleteProject(String id) {
+        projectRepository.deleteById(id);
+    }
 
     public Optional<Project> getProjectById(String id) {
         return projectRepository.findById(id); //unused
