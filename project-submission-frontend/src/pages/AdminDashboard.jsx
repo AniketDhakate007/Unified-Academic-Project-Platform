@@ -5,8 +5,13 @@ import { getAllProjectsAdmin } from '../services/ProjectService';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from "prop-types";
 import { Search, Users, Eye, ArrowRight, Code, Layers, Clock, GitBranch, UserCheck, Filter } from 'lucide-react';
+import api from "../services/axiosInstance.js";
+import ManageImportantDates from "../components/ManageImportantDates.jsx";
+
+
 
 const AdminDashboard = () => {
+
   const [projects, setProjects] = useState([]);
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -16,11 +21,11 @@ const AdminDashboard = () => {
   const isDark = useDarkMode();
   const theme = getTheme(isDark);
 
+
   useEffect(() => {
     setMounted(true);
     fetchProjects();
   }, []);
-
 
    // Set document title on mount
     useEffect(() => {
@@ -61,14 +66,14 @@ const AdminDashboard = () => {
 
                                 Faculty Dashboard
 
-                                Admin Dashboard
-
                             </h1>
                             <p className={`text-sm ${theme.text.secondary}`}>
                                 Monitor and manage all student projects
                             </p>
                         </div>
-                        
+                        <ManageImportantDates theme={theme} />
+
+
                         <div className="flex items-center gap-3">
                             <div className={`hidden sm:flex items-center gap-4 text-xs ${theme.text.secondary}`}>
                                 <div className={`flex items-center gap-2 px-3 py-1.5 ${theme.button} ${theme.buttonBorder} border rounded-md`}>
@@ -86,28 +91,6 @@ const AdminDashboard = () => {
                         </div>
                     </div>
                 </header>
-
-                {/* Search Section */}
-                <div className={`mb-8 transition-all duration-500 delay-75 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                    <div className="relative max-w-md">
-                        <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${theme.text.muted}`} />
-                        <input
-                            type="text"
-                            placeholder="Search by project title or guide name..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            className={`w-full pl-10 pr-4 py-2.5 ${theme.searchBg} ${theme.searchBorder} border rounded-lg ${theme.text.primary} placeholder-${theme.text.muted.replace('text-', '')} focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-200`}
-                        />
-                        {search && (
-                            <button
-                                onClick={() => setSearch("")}
-                                className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${theme.text.muted} hover:${theme.text.secondary} transition-colors`}
-                            >
-                                ×
-                            </button>
-                        )}
-                    </div>
-                </div>
 
                 {/* Projects Section */}
                 <main className={`transition-all duration-500 delay-100 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
@@ -149,9 +132,12 @@ const AdminDashboard = () => {
                     )}
                 </main>
             </div>
+
         </div>
+
     );
 };
+
 
 // Empty State Component
 const EmptyState = ({ search, theme }) => {
