@@ -8,6 +8,9 @@ import logo from '../assets/react.svg';
 import LogoLoop from '../components/LogoLoop';
 import { event } from '../utils/analytics';
 import '../App.css';
+import api from "../services/axiosInstance.js";
+import LandingPagePopup from "../components/LandingPagePopup";
+
 const Landing = () => {
     const navigate = useNavigate();
     const [isLoaded, setIsLoaded] = useState(false);
@@ -43,6 +46,28 @@ const Landing = () => {
             setHasLoaded(true);
         }, 1200);
         return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(() => {
+        const fetchDates = async () => {
+            try {
+                const res = await api.get("/important-dates");
+                if (res.data.length > 0) {
+                    // sort by date, pick nearest upcoming
+                    const upcoming = res.data
+                        .map(d => ({ ...d, date: new Date(d.date) }))
+                        .filter(d => d.date > new Date())
+                        .sort((a, b) => a.date - b.date);
+
+                    if (upcoming.length > 0) {
+                        setImportantDate(upcoming[0]); // nearest upcoming event
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch important dates", err);
+            }
+        };
+        fetchDates();
     }, []);
 
     // Optimized animation variants
@@ -286,7 +311,9 @@ const Landing = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 text-gray-900 overflow-x-hidden">
+        <div>
+            <LandingPagePopup />
+            <div className="min-h-screen bg-gray-50 text-gray-900 overflow-x-hidden">
             {!hasLoaded && <Loader />}
             <Background />
 
@@ -414,6 +441,7 @@ const Landing = () => {
 
                         {/* Stats */}
                     </div>
+
                 </section>
 
                 {/* Choose Portal Section */}
@@ -590,100 +618,6 @@ const Landing = () => {
                     </motion.div>
                 </section>
 
-                {/* Features */}
-                {/* <section
-                    ref={featuresRef}
-                    id='features'
-                    className="min-h-screen flex items-center py-20 px-6 border-t border-gray-200"
-                >
-                    <motion.div
-                        className="max-w-7xl mx-auto"
-                        initial="hidden"
-                        animate={featuresInView ? "visible" : "hidden"}
-                        variants={staggerContainer}
-                    >
-                        <motion.div
-                            variants={fadeUp}
-                            className="text-center mb-16"
-                        >
-                            <h2 className="text-5xl md:text-7xl font-black mb-6 text-gray-900 tracking-tight">
-                                POWERFUL FEATURES
-                            </h2>
-                            <div className="max-w-3xl mx-auto">
-                                <p className="text-xl text-gray-600 leading-relaxed font-light">
-                                    Advanced tools and intelligent automation designed to maximize productivity.
-                                </p>
-                            </div>
-                        </motion.div>
-
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {[
-                                {
-                                    title: 'AI ANALYTICS',
-                                    description: 'Machine learning insights with predictive analytics and intelligent recommendations.',
-                                    stat: '99.8%',
-                                    statLabel: 'ACCURACY'
-                                },
-                                {
-                                    title: 'REAL-TIME COLLABORATION',
-                                    description: 'Seamless team coordination with live editing and workflow management.',
-                                    stat: '24/7',
-                                    statLabel: 'SUPPORT'
-                                },
-                                {
-                                    title: 'ENTERPRISE SECURITY',
-                                    description: 'Military-grade encryption with advanced threat protection.',
-                                    stat: '256-BIT',
-                                    statLabel: 'ENCRYPTION'
-                                },
-                                {
-                                    title: 'SMART AUTOMATION',
-                                    description: 'Intelligent workflow automation with custom triggers.',
-                                    stat: '5.2M+',
-                                    statLabel: 'AUTOMATIONS'
-                                },
-                                {
-                                    title: 'CLOUD SYNC',
-                                    description: 'Universal synchronization with conflict resolution.',
-                                    stat: '<15MS',
-                                    statLabel: 'SYNC TIME'
-                                },
-                                {
-                                    title: 'PREMIUM SUPPORT',
-                                    description: 'Dedicated support team with priority assistance.',
-                                    stat: '100%',
-                                    statLabel: 'SATISFACTION'
-                                }
-                            ].map((feature, index) => (
-                                <motion.div
-                                    key={index}
-                                    variants={fadeUp}
-                                    className="group"
-                                >
-                                    <div className="bg-white/50 backdrop-blur-sm border border-gray-200 p-6 hover:bg-white hover:shadow-md transition-all duration-300 h-full">
-                                        <div className="flex items-start justify-between mb-6">
-                                            <div className="text-xl font-black text-gray-300">
-                                                0{index + 1}
-                                            </div>
-                                            <div className="text-right">
-                                                <div className="text-lg font-bold text-gray-900">{feature.stat}</div>
-                                                <div className="text-xs text-gray-500 uppercase tracking-wide font-medium">{feature.statLabel}</div>
-                                            </div>
-                                        </div>
-
-                                        <h4 className="text-lg font-black mb-3 text-gray-900 tracking-tight">
-                                            {feature.title}
-                                        </h4>
-
-                                        <p className="text-gray-600 leading-relaxed font-light text-sm">
-                                            {feature.description}
-                                        </p>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </motion.div>
-                </section> */}
 
                 {/* Developer Section */}
                 <section
@@ -915,6 +849,7 @@ const Landing = () => {
                     </div>
                 </div>
             </footer>
+        </div>
         </div>
     );
 };
