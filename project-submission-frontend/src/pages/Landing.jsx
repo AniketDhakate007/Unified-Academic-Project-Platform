@@ -10,6 +10,7 @@ import { event } from '../utils/analytics';
 import '../App.css';
 import api from "../services/axiosInstance.js";
 import LandingPagePopup from "../components/LandingPagePopup";
+import DevelopedBy from "../components/DevelopedBy.jsx";
 
 const Landing = () => {
     const navigate = useNavigate();
@@ -640,41 +641,8 @@ const Landing = () => {
                                 excellence in academic technology.
                             </p>
                         </motion.div>
-
-                        {/* Team Display */}
-                        <motion.div
-                            variants={fadeUp}
-                            className="bg-white border border-gray-200 p-10 hover:shadow-md transition-all duration-300 rounded-2xl"
-                        >
-                            <div className="text-center mb-8">
-                                <h3 className="text-2xl font-black mb-3 text-gray-900 tracking-tight">
-                                    INTERACTIVE TEAM DISPLAY
-                                </h3>
-                                <p className="text-gray-600 text-sm font-light">
-                                    Experience our dynamic team visualization
-                                </p>
-                            </div>
-
-                            {/* Chroma Grid */}
-                        </motion.div>
                     </motion.div>
-
-                    {/* Logo Loop */}
-                    <div className="w-full mt-12">
-                        {/* // Mobile-optimized props for LogoLoop */}
-                        {/* <LogoLoop
-                        logos={techLogos}
-                        speed={window.innerWidth < 768 ? 80 : 120} // Slower on mobile
-                        direction="left"
-                        logoHeight={window.innerWidth < 768 ? 32 : 42} // Smaller on mobile
-                        gap={window.innerWidth < 768 ? 20 : 30} // Tighter spacing on mobile
-                        pauseOnHover
-                        scaleOnHover
-                        fadeOut
-                        fadeOutColor="#ffffff"
-                        ariaLabel="Technology partners"
-                    /> */}
-                    </div>
+                    <DevelopedBy/>
                 </section>
 
                 {/* FAQ Section */}
