@@ -1,6 +1,6 @@
 import React from 'react';
 import A from '/A.jpg';
-
+import H from '/hemant.webp';
 const DevelopedBy = () => {
     return (
         <section className="py-20 px-4 bg-gradient-to-br from-white via-gray-50 to-gray-100 overflow-hidden">
@@ -112,7 +112,7 @@ const DevelopedBy = () => {
 
                                 {/* Description */}
                                 <p className="text-sm md:text-base text-gray-600 leading-relaxed">
-                                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat.
+                                    Creating, deploying, and optimizing full-stack web applications with modern tech.
                                 </p>
 
 
@@ -120,7 +120,7 @@ const DevelopedBy = () => {
                                 {/* Social Links */}
                                 <div className="flex space-x-3 pt-2">
                                     <a
-                                        href="https://linkedin.com/in/sarah-chen"
+                                        href="https://www.linkedin.com/in/hemant-gowardipe-96614b24a/"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 hover:text-gray-900 transition-all duration-300 hover:scale-110"
@@ -131,7 +131,7 @@ const DevelopedBy = () => {
                                     </a>
 
                                     <a
-                                        href="https://github.com/sarah-chen"
+                                        href="https://github.com/hemantgowardipe"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="p-2 rounded-full bg-gray-800 hover:bg-black text-white transition-all duration-300 hover:scale-110"
@@ -142,7 +142,7 @@ const DevelopedBy = () => {
                                     </a>
 
                                     <a
-                                        href="https://twitter.com/sarahcodes"
+                                        href="https://www.instagram.com/hemant_gowardipe/"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-all duration-300 hover:scale-110"
@@ -167,7 +167,7 @@ const DevelopedBy = () => {
                                 <div className="relative z-10 transform hover:scale-105 transition-transform duration-500">
                                     <div className="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden shadow-2xl ring-4 ring-white">
                                         <img
-                                            src="/api/placeholder/200/200"
+                                            src={H}
                                             alt="Sarah Chen - Developer"
                                             className="w-full h-full object-cover"
                                         />
