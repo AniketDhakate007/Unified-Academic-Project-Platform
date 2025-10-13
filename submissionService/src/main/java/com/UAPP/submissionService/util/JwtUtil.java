@@ -42,12 +42,13 @@ public class JwtUtil {
     }
 
     public boolean isAdmin(String token) {
-        String role = extractRole(token);
-        if (role != null) {
-            return "ADMIN".equalsIgnoreCase(role);
-        }
-        // Fallback if role not present — treat hardcoded admin username as ADMIN
-        String username = extractUsername(token);
-        return "admin".equalsIgnoreCase(username);
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        String role = claims.get("role", String.class);
+        return "ADMIN".equalsIgnoreCase(role);
     }
 }
