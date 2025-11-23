@@ -8,51 +8,55 @@ import { Search, Users, Eye, ArrowRight, Code, Layers, Clock, GitBranch, UserChe
 import api from "../services/axiosInstance.js";
 import ManageImportantDates from "../components/ManageImportantDates.jsx";
 
-
-
 const AdminDashboard = () => {
-
-  const [projects, setProjects] = useState([]);
-  const [search, setSearch] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [mounted, setMounted] = useState(false);
-  const navigate = useNavigate();
-
-  const isDark = useDarkMode();
-  const theme = getTheme(isDark);
+    const [projects, setProjects] = useState([]);
+    const [search, setSearch] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    const [mounted, setMounted] = useState(false);
+    const navigate = useNavigate();
+    const [semesterFilter, setSemesterFilter] = useState("ALL");
 
 
-  useEffect(() => {
-    setMounted(true);
-    fetchProjects();
-  }, []);
+    const isDark = useDarkMode();
+    const theme = getTheme(isDark);
 
-   // Set document title on mount
     useEffect(() => {
-    document.title = "UAPP | Admin Dashboard";
-  }, []);
+        setMounted(true);
+        fetchProjects();
+    }, []);
 
+    // Set document title on mount
+    useEffect(() => {
+        document.title = "UAPP | Admin Dashboard";
+    }, []);
 
-  const fetchProjects = async () => {
-    setIsLoading(true);
-    try {
-      const res = await getAllProjectsAdmin();
-      setProjects(res.data);
-    } catch (err) {
-      console.error("Admin load error", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    const fetchProjects = async () => {
+        setIsLoading(true);
+        try {
+            const res = await getAllProjectsAdmin();
+            setProjects(res.data);
+        } catch (err) {
+            console.error("Admin load error", err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-  const filteredProjects = projects.filter(
-    (p) =>
-      p.guideName?.toLowerCase().includes(search.toLowerCase()) ||
-      p.title?.toLowerCase().includes(search.toLowerCase())
-  );
+    const filteredProjects = projects
+        .filter((p) => {
+            const query = search.toLowerCase();
 
+            return (
+                p.title?.toLowerCase().includes(query) ||
+                p.guideName?.toLowerCase().includes(query) ||
+                p.coGuideName?.toLowerCase().includes(query)
+            );
+        })
+        .filter((p) => {
+            if (semesterFilter === "ALL") return true;
 
-  const uniqueGuides = [...new Set(projects.map((p) => p.guideName).filter(Boolean))];
+            return String(p.semester) === String(semesterFilter);
+        });
 
     return (
         <div className={`min-h-screen transition-colors duration-200 ${theme.bg}`}>
@@ -63,9 +67,7 @@ const AdminDashboard = () => {
                         <div className="space-y-1">
                             <h1 className={`text-2xl font-semibold ${theme.text.primary} flex items-center gap-2`}>
                                 <Users className="w-6 h-6" />
-
                                 Faculty Dashboard
-
                             </h1>
                             <p className={`text-sm ${theme.text.secondary}`}>
                                 Monitor and manage all student projects
@@ -73,24 +75,57 @@ const AdminDashboard = () => {
                         </div>
                         <ManageImportantDates theme={theme} />
 
-
                         <div className="flex items-center gap-3">
                             <div className={`hidden sm:flex items-center gap-4 text-xs ${theme.text.secondary}`}>
                                 <div className={`flex items-center gap-2 px-3 py-1.5 ${theme.button} ${theme.buttonBorder} border rounded-md`}>
                                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                                     <span>{projects.length} projects</span>
                                 </div>
-
-
-                                <div className={`flex items-center gap-2 px-3 py-1.5 ${theme.button} ${theme.buttonBorder} border rounded-md`}>
-                                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                    <span>{uniqueGuides.length} guides</span>
-                                </div>
-
                             </div>
                         </div>
                     </div>
                 </header>
+
+                {/* Search Section */}
+                <div className={`mb-8 transition-all duration-500 delay-75 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                    <div className="relative max-w-md">
+                        <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${theme.text.muted}`} />
+                        <input
+                            type="text"
+                            placeholder="Search by project title or guide name..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className={`w-full pl-10 pr-4 py-2.5 ${theme.searchBg} ${theme.searchBorder} border rounded-lg ${theme.text.primary} placeholder-${theme.text.muted.replace('text-', '')} focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-200`}
+                        />
+                        {search && (
+                            <button
+                                onClick={() => setSearch("")}
+                                className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${theme.text.muted} hover:${theme.text.secondary} transition-colors`}
+                            >
+                                ×
+                            </button>
+                        )}
+                    </div>
+                </div>
+                {/* Semester Filter */}
+                <div className="flex gap-2 mb-8 flex-wrap">
+                    {["ALL", "6", "7", "8"].map((sem) => (
+                        <button
+                            key={sem}
+                            onClick={() => setSemesterFilter(sem)}
+                            className={`
+                px-4 py-1.5 text-sm rounded-md border transition
+                ${semesterFilter === sem
+                                ? "bg-blue-600 text-white border-blue-600"
+                                : `${theme.cardBg} ${theme.border} text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700`
+                            }
+            `}
+                        >
+                            {sem === "ALL" ? "All Semesters" : `Semester ${sem}`}
+                        </button>
+                    ))}
+                </div>
+
 
                 {/* Projects Section */}
                 <main className={`transition-all duration-500 delay-100 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
@@ -116,15 +151,15 @@ const AdminDashboard = () => {
                                     </span>
                                 </div>
                             </div>
-                            
+
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                                 {filteredProjects.map((project, index) => (
-                                    <ProjectCard 
-                                        key={project.id} 
-                                        project={project} 
+                                    <ProjectCard
+                                        key={project.id}
+                                        project={project}
                                         index={index}
                                         theme={theme}
-                                        onClick={() => navigate(`/admin/project/${project.id}`)} 
+                                        onClick={() => navigate(`/admin/project/${project.id}`)}
                                     />
                                 ))}
                             </div>
@@ -132,12 +167,9 @@ const AdminDashboard = () => {
                     )}
                 </main>
             </div>
-
         </div>
-
     );
 };
-
 
 // Empty State Component
 const EmptyState = ({ search, theme }) => {
@@ -150,19 +182,19 @@ const EmptyState = ({ search, theme }) => {
                     <Users className={`w-8 h-8 ${theme.text.muted}`} />
                 )}
             </div>
-            
+
             <div className="text-center space-y-2 max-w-md">
                 <h3 className={`text-lg font-semibold ${theme.text.primary}`}>
                     {search ? 'No projects found' : 'No projects yet'}
                 </h3>
                 <p className={`text-sm ${theme.text.secondary} leading-relaxed`}>
-                    {search 
+                    {search
                         ? `No projects match "${search}". Try adjusting your search terms.`
                         : 'No student projects have been created yet.'
                     }
                 </p>
             </div>
-            
+
             {search && (
                 <button
                     className={`mt-6 ${theme.button} ${theme.buttonBorder} border ${theme.text.secondary} px-4 py-2 rounded-md font-medium text-sm transition-colors duration-200 flex items-center gap-2`}
@@ -178,18 +210,18 @@ const EmptyState = ({ search, theme }) => {
 // Loading Skeleton Component
 const LoadingSkeleton = ({ theme }) => {
     const skeletonBg = theme.cardBg.replace('bg-', 'bg-opacity-50 bg-');
-    
+
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between mb-6">
                 <div className={`h-6 ${skeletonBg} rounded-md w-32 animate-pulse`}></div>
                 <div className={`h-4 ${skeletonBg} rounded-md w-20 animate-pulse`}></div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {[...Array(6)].map((_, index) => (
-                    <div 
-                        key={index} 
+                    <div
+                        key={index}
                         className={`${theme.cardBg} ${theme.border} border rounded-lg p-6 animate-pulse`}
                         style={{ animationDelay: `${index * 100}ms` }}
                     >
@@ -197,13 +229,13 @@ const LoadingSkeleton = ({ theme }) => {
                             <div className={`w-10 h-10 ${skeletonBg} rounded-md`}></div>
                             <div className={`w-4 h-4 ${skeletonBg} rounded`}></div>
                         </div>
-                        
+
                         <div className="space-y-3">
                             <div className={`h-5 ${skeletonBg} rounded w-3/4`}></div>
                             <div className={`h-4 ${skeletonBg} rounded w-full`}></div>
                             <div className={`h-4 ${skeletonBg} rounded w-5/6`}></div>
                         </div>
-                        
+
                         <div className={`mt-6 pt-4 border-t ${theme.border} flex items-center justify-between`}>
                             <div className={`h-4 ${skeletonBg} rounded w-24`}></div>
                             <div className={`w-2 h-2 ${skeletonBg} rounded-full`}></div>
@@ -232,10 +264,10 @@ const ProjectCard = ({ project, index, theme, onClick }) => {
 
     return (
         <button
-        type="button"
-        onClick={onClick}
-        style={{ transitionDelay: `${index * 25}ms` }}
-        className={`group w-full text-left ${theme.cardBg} ${theme.border} border rounded-lg p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}
+            type="button"
+            onClick={onClick}
+            style={{ transitionDelay: `${index * 25}ms` }}
+            className={`group w-full text-left ${theme.cardBg} ${theme.border} border rounded-lg p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}
         >
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
@@ -253,7 +285,7 @@ const ProjectCard = ({ project, index, theme, onClick }) => {
                 <h3 className={`text-base font-medium ${theme.text.primary} group-hover:text-blue-600 transition-colors duration-200 line-clamp-1`}>
                     {project.title}
                 </h3>
-                
+
                 {project.description && (
                     <p className={`${theme.text.secondary} line-clamp-2 text-sm leading-relaxed`}>
                         {project.description}
@@ -276,7 +308,7 @@ const ProjectCard = ({ project, index, theme, onClick }) => {
                         <Clock className="w-3 h-3" />
                         <span>{project.startDate}</span>
                     </div>
-                    
+
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                 </div>
             </div>
@@ -285,23 +317,23 @@ const ProjectCard = ({ project, index, theme, onClick }) => {
 };
 
 EmptyState.propTypes = {
-  search: PropTypes.string.isRequired, // search term entered by user
-  theme: PropTypes.oneOf(["light", "dark"]).isRequired, // enforce specific theme values
+    search: PropTypes.string.isRequired, // search term entered by user
+    theme: PropTypes.oneOf(["light", "dark"]).isRequired, // enforce specific theme values
 };
 LoadingSkeleton.propTypes = {
-  theme: PropTypes.oneOf(["light", "dark"]).isRequired, // skeleton theme
+    theme: PropTypes.oneOf(["light", "dark"]).isRequired, // skeleton theme
 };
 ProjectCard.propTypes = {
-  project: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    link: PropTypes.string,
-    guideName: PropTypes.string,      // 👈 add this
-    startDate: PropTypes.string,
-  }).isRequired,
-  index: PropTypes.number.isRequired,
-  theme: PropTypes.oneOf(["light", "dark"]).isRequired,
-  onClick: PropTypes.func,
+    project: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        link: PropTypes.string,
+        guideName: PropTypes.string,      // 👈 add this
+        startDate: PropTypes.string,
+    }).isRequired,
+    index: PropTypes.number.isRequired,
+    theme: PropTypes.oneOf(["light", "dark"]).isRequired,
+    onClick: PropTypes.func,
 };
 
 export default AdminDashboard;

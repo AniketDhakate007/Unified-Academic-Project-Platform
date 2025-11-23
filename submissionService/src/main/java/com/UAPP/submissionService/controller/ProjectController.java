@@ -57,6 +57,10 @@ public class ProjectController {
 
         return ResponseEntity.ok(project);
     }
+//    @GetMapping("/semester/{sem}")
+//    public ResponseEntity<List<Project>> getProjectBySem(@PathVariable String sem){
+//        return ResponseEntity.ok(projectService.getProjectsBySemester(sem));
+//    }
 
     @GetMapping("/my")
     public ResponseEntity<List<Project>> getMyProjects(@RequestHeader("Authorization") String token) {

@@ -1,5 +1,6 @@
 package com.UAPP.submissionService.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
@@ -26,9 +27,11 @@ public class Project {
     private String coGuideName;
     private String email;
     private String url;
+    private String semester;
     private LocalDate startDate;
     private LocalDate finalSubmissionDate;
     private String githubRepo;
+    @JsonIgnore
     private Binary projectSummaryPdf;
     private String createdBy;
 

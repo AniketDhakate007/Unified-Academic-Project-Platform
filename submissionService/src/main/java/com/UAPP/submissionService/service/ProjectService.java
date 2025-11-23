@@ -28,11 +28,12 @@ public class ProjectService {
                 .coGuideName(request.getCoGuideName())
                 .email(request.getEmail())
                 .url(request.getUrl())
+                .semester(request.getSemester())
                 .githubRepo(request.getGithubRepo())
                 .startDate(request.getStartDate())
                 .finalSubmissionDate(request.getFinalSubmissionDate())
                 .projectSummaryPdf(new Binary(BsonBinarySubType.BINARY, pdfBytes))
-                .createdBy(username) // ✅ SET THIS
+                .createdBy(username)
                 .build();
 
         return projectRepository.save(project);
@@ -47,6 +48,7 @@ public class ProjectService {
         existing.setCoGuideName(request.getCoGuideName());
         existing.setEmail(request.getEmail());
         existing.setUrl(request.getUrl());
+        existing.setSemester(request.getSemester());
         existing.setGithubRepo(request.getGithubRepo());
         existing.setStartDate(request.getStartDate());
         existing.setFinalSubmissionDate(request.getFinalSubmissionDate());
@@ -63,6 +65,10 @@ public class ProjectService {
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
+//    public List<Project> getProjectsBySemester(String sem) {
+//        return projectRepository.findBySem(sem);
+//    }
+
 
     public List<Project> getProjectsByStudent(String username) {
         return projectRepository.findByCreatedBy(username); // preferred

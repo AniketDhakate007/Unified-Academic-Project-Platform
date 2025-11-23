@@ -132,6 +132,11 @@ const ProjectDetail = () => {
                                 <span className="pd-meta-label">Project Co-Guide</span>
                                 <span className="pd-meta-value">{project.coGuideName}</span>
                             </div>
+                            <div className="pd-meta-card">
+                                <span className="pd-meta-label">Semester</span>
+                                <span className="pd-meta-value">{project.semester}</span>
+                            </div>
+
 
                             <div className="pd-meta-grid">
                                 <div className="pd-meta-card">
@@ -156,6 +161,8 @@ const ProjectDetail = () => {
                         </div>
                         <div className="pd-description-content">{project.description}</div>
                     </section>
+
+
 
                     {/* TEAM + TIMELINE */}
                     <div className="pd-main-grid">

@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface ProjectRepository extends MongoRepository<Project, String> {
     Optional<Project> findById(String id);
     List<Project> findByCreatedBy(String username);
+
+//    List<Project> findBySem(String semester);
     Optional<Project> findByTitle(String title);
 
 

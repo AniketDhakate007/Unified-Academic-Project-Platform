@@ -10,6 +10,7 @@ const EditProject = () => {
     const [project, setProject] = useState(null);
     const [pdfFile, setPdfFile] = useState(null);
 
+
      // Set document title on mount
     useEffect(() => {
     document.title = "UAPP | Edit Project";
@@ -106,6 +107,18 @@ const EditProject = () => {
                     placeholder="Co-Guide Name"
                     className="w-full p-3 rounded bg-gray-700 border border-gray-600"
                 />
+                <h4>Semester</h4>
+                <select
+                    value={project.semester}
+                    onChange={(e) => handleChange("semester", e.target.value)}
+                    className="w-full p-3 rounded bg-gray-700 border border-gray-600 text-white"
+                >
+                    <option value="">Select Semester</option>
+                    <option value="6">6th Semester</option>
+                    <option value="7">7th Semester</option>
+                    <option value="8">8th Semester</option>
+                </select>
+
                 <h4>Github Repository</h4>
                 <input
                     type="text"
