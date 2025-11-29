@@ -4,20 +4,12 @@
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
-# Copy pom.xml and Maven wrapper first
 COPY pom.xml mvnw ./
 COPY .mvn .mvn
-
-# Ensure mvnw is executable
 RUN chmod +x mvnw
-
-# Pre-download dependencies
 RUN ./mvnw dependency:go-offline -B
 
-# Copy the actual source code
 COPY src ./src
-
-# Build the Spring Boot JAR (skip tests for faster build)
 RUN ./mvnw clean package -DskipTests
 
 # =====================
@@ -34,5 +26,7 @@ RUN chown appuser:appgroup app.jar
 
 USER appuser
 
-# Optimized JVM flags for faster cold starts on Render free tier
-ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-XX:+UseSerialGC", "-XX:TieredStopAtLevel=1", "-noverify", "-jar", "app.jar"]
+# VERY IMPORTANT: Strict memory limits
+ENV JAVA_OPTS="-Xms128m -Xmx256m -XX:+UseSerialGC"
+
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
